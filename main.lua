@@ -10,7 +10,7 @@ local smoothVerts = {}
 
 local weights = {}
 
-local alpha = 50
+local alpha = 70
 
 local function PMinus(p2, p1)
     local p = {}
@@ -148,6 +148,8 @@ for id, faceIndexes in pairs(adjacent) do
         cases = cases + 1
         needSmoothFace[faceIndexes[1]] = true
         needSmoothFace[faceIndexes[2]] = true
+        weights[faceIndexes[1]] = 1
+        weights[faceIndexes[2]] = 1
     end
 end
 
@@ -181,7 +183,6 @@ for faceIndex, _ in pairs(needSmoothFace) do
             tempPoints["vdx" .. j].x = tempPoints["vdx" .. j].x + verts[faces[i]["vdx" .. j]].x * weights[idxex[i]]
             tempPoints["vdx" .. j].y = tempPoints["vdx" .. j].y + verts[faces[i]["vdx" .. j]].y * weights[idxex[i]]
             tempPoints["vdx" .. j].z = tempPoints["vdx" .. j].z + verts[faces[i]["vdx" .. j]].z * weights[idxex[i]]
-            
         end
     end
     for j = 1, 3 do
@@ -207,7 +208,7 @@ end
 
 tempVerts = {}
 
-local output = io.open("/Users/yanwei/Desktop/ProjectX/model.obj", "w")
+local output = io.open("/Users/yanwei/Desktop/ProjectX/output.obj", "w")
 
 local fmt = "v %f %f %f\n"
 for i, v in pairs(verts) do
