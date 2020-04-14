@@ -12,6 +12,13 @@ local weights = {}
 
 local alpha = 70
 
+local spread = true
+
+local t = {...}
+
+local inputDir = t[1]
+local outputDir = t[2]
+
 local function PMinus(p2, p1)
     local p = {}
     p.x = p2.x - p1.x
@@ -77,7 +84,7 @@ local function CalcNormal(face)
     assert(false)
 end
 
-for line in io.lines("/Users/yanwei/Desktop/ProjectX/model.obj") do
+for line in io.lines(inputDir) do
     local input = {}
     for splits in string.gmatch(line, reg) do
         input[#input + 1] = splits
@@ -192,23 +199,23 @@ for faceIndex, _ in pairs(needSmoothFace) do
     end
 
     for i = 1, 3 do
-        tempVerts[face["vdx" .. i]] = {
-            x = tempPoints["vdx" .. i].x,
-            y = tempPoints["vdx" .. i].y,
-            z = tempPoints["vdx" .. i].z
-        }
-
-        verts[face["vdx" .. i]] = {
-            x = tempPoints["vdx" .. i].x,
-            y = tempPoints["vdx" .. i].y,
-            z = tempPoints["vdx" .. i].z
-        }
+        if not spread then
+            tempVerts[face["vdx" .. i]] = {
+                x = tempPoints["vdx" .. i].x,
+                y = tempPoints["vdx" .. i].y,
+                z = tempPoints["vdx" .. i].z
+            }
+        else
+            verts[face["vdx" .. i]] = {
+                x = tempPoints["vdx" .. i].x,
+                y = tempPoints["vdx" .. i].y,
+                z = tempPoints["vdx" .. i].z
+            }
+        end
     end
 end
 
-tempVerts = {}
-
-local output = io.open("/Users/yanwei/Desktop/ProjectX/output.obj", "w")
+local output = io.open(outputDir, "w")
 
 local fmt = "v %f %f %f\n"
 for i, v in pairs(verts) do
